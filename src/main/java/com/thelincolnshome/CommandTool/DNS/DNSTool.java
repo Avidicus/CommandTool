@@ -216,12 +216,16 @@ public final class DNSTool implements LineParser
 	private void run()
 	{
 		FileWriter out = null;
+		FileWriter err = null;
 		PrintWriter print = null;
+		PrintWriter printErr = null;
 
 		try
 		{
 			out = new FileWriter(new File(dnsfile + ".out"));
+			err = new FileWriter(new File(dnsfile + ".err"));
 			print = new PrintWriter(out);
+			printErr = new PrintWriter(err);
 
 			print.println(compose("DOMAIN", "A", "HOSTED", "DNS"));
 
@@ -238,10 +242,14 @@ public final class DNSTool implements LineParser
 				{
 					Domain domain = new Domain(line.toString());
 
-					print.println(compose(domain.getHostname(), domain.getARecords().get(0).toString(), Boolean.toString(domain.isStoresOnlineHosted()), Boolean.toString(domain.isStoresOnlineNameServers())));
+					String aRecord = domain.getARecords().isEmpty() ? "UNKNOWN" : domain.getARecords().get(0).toString();
+
+					print.println(compose(domain.getHostname(), aRecord, Boolean.toString(domain.isStoresOnlineHosted()), Boolean.toString(domain.isStoresOnlineNameServers())));
 				}
 				catch(Exception e)
 				{
+					printErr.println(line.toString());
+
 					log.error("Problem with " + line.toString(), e);
 				}
 			}
@@ -254,6 +262,9 @@ public final class DNSTool implements LineParser
 		{
 			IOUtils.closeQuietly(print);
 			IOUtils.closeQuietly(out);
+
+			IOUtils.closeQuietly(printErr);
+			IOUtils.closeQuietly(err);
 		}
 	}
 
