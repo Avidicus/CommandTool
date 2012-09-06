@@ -26,6 +26,7 @@ import org.xbill.DNS.ExtendedResolver;
 import org.xbill.DNS.Lookup;
 
 import com.thelincolnshome.CommandTool.LineParser;
+import com.thelincolnshome.CommandTool.LineParsers;
 import com.thelincolnshome.CommandTool.Register;
 
 public final class DNSTool implements LineParser
