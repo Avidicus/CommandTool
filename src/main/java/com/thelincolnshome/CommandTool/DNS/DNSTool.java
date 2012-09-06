@@ -67,7 +67,10 @@ public final class DNSTool implements LineParser
 
 		try
 		{
-			Lookup.setDefaultResolver(new ExtendedResolver(new String[] { "8.8.8.8" }));
+			ExtendedResolver resolver = new ExtendedResolver(new String[] { "8.8.8.8", "4.2.2.6", "4.2.2.1", "8.8.4.4", "4.2.2.3", "4.2.2.4", "4.2.2.5" });
+			resolver.setLoadBalance(true);
+
+			Lookup.setDefaultResolver(resolver);
 		}
 		catch(UnknownHostException e)
 		{
@@ -172,6 +175,7 @@ public final class DNSTool implements LineParser
 			try
 			{
 				ExtendedResolver resolver = new ExtendedResolver(StringUtils.split(line.getOptionValue(NAMESERVER)));
+				resolver.setLoadBalance(true);
 
 				Lookup.setDefaultResolver(resolver);
 			}
