@@ -73,7 +73,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 				</descriptorRefs>
 				<archive>
 					<manifest>
-						<mainClass>com.thelincolnshome.home.DNSTool.App</mainClass>
+						<mainClass>com.thelincolnshome.CommandTool.Main</mainClass>
 					</manifest>
 				</archive>
 			</configuration>

@@ -11,13 +11,12 @@ import java.util.HashSet;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class Main
 {
-
 	protected static final Logger			log			= LoggerFactory.getLogger(Main.class);
 	protected static HashMap<String, File>	jars		= new HashMap<String, File>();
 
@@ -31,17 +30,22 @@ public class Main
 		{
 			register();
 
-			LineParser interpreter = LineParsers.getParser(args[0]);
+			if(args.length == 1 && StringUtils.isNotEmpty(args[0]))
+			{
+				LineParser interpreter = LineParsers.getParser(args[0]);
 
-			if(interpreter != null)
-			{
-				Console console = new Console(interpreter);
-				console.run();
+				if(interpreter != null)
+				{
+					Console console = new Console(interpreter);
+					console.run();
+
+					return;
+				}
 			}
-			else
-			{
-				Console.display(LineParsers.getParsers());
-			}
+
+			Console.display("Available Parsers: ");
+			Console.display(LineParsers.getParsers());
+			Console.display("\n");
 		}
 		catch(Exception e)
 		{

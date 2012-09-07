@@ -13,5 +13,4 @@ public interface LineParser
 	String getHelloPrompt();
 
 	boolean parseInput(String inLine, final List<Object> aResult) throws ParseException;
-
 }
