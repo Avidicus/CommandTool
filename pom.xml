@@ -5,11 +5,11 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 <groupId>com.thelincolnshome</groupId>
 <artifactId>CommandTool</artifactId>
-<version>0.0.1-SNAPSHOT</version>
+<version>0.1.0</version>
 <packaging>jar</packaging>
 
 <name>CommandTool</name>
-<url>http://maven.apache.org</url>
+<url>https://github.com/Avidicus/CommandTool/wiki</url>
 
 <properties>
 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
