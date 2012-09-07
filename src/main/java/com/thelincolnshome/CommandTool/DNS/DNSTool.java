@@ -140,11 +140,6 @@ public final class DNSTool implements LineParser
 			getUsage();
 		}
 
-		if(EXIT.equalsIgnoreCase(inLine) || line.hasOption(EXIT))
-		{
-			return true;
-		}
-
 		if(line.hasOption(DNS_FILE))
 		{
 			dnsfile = line.getOptionValue(DNS_FILE);
@@ -214,11 +209,18 @@ public final class DNSTool implements LineParser
 			}
 		}
 
+		if(EXIT.equalsIgnoreCase(inLine) || line.hasOption(EXIT))
+		{
+			return true;
+		}
+
 		return false;
 	}
 
 	private void run()
 	{
+		File errorFile = new File(dnsfile + ".err");
+
 		FileWriter out = null;
 		FileWriter err = null;
 		PrintWriter print = null;
@@ -227,7 +229,7 @@ public final class DNSTool implements LineParser
 		try
 		{
 			out = new FileWriter(new File(dnsfile + ".out"));
-			err = new FileWriter(new File(dnsfile + ".err"));
+			err = new FileWriter(errorFile);
 			print = new PrintWriter(out);
 			printErr = new PrintWriter(err);
 
@@ -269,6 +271,11 @@ public final class DNSTool implements LineParser
 
 			IOUtils.closeQuietly(printErr);
 			IOUtils.closeQuietly(err);
+		}
+
+		if(errorFile.length() < 1)
+		{
+			errorFile.delete();
 		}
 	}
 

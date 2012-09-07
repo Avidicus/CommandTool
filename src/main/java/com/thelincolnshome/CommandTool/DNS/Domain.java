@@ -1,13 +1,12 @@
 package com.thelincolnshome.CommandTool.DNS;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.validator.routines.DomainValidator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xbill.DNS.ARecord;
 import org.xbill.DNS.Address;
 import org.xbill.DNS.Lookup;
@@ -20,8 +19,6 @@ import com.thelincolnshome.CommandTool.Register;
 
 public class Domain
 {
-	private static Logger					log				= LoggerFactory.getLogger(Domain.class);
-
 	private String							hostname		= null;
 	private ArrayList<IPv4>					aRecords		= new ArrayList<IPv4>();
 	private ArrayList<String>				nameServers		= new ArrayList<String>();
@@ -57,21 +54,14 @@ public class Domain
 		}
 	}
 
-	public List<String> getNameServers()
+	public List<String> getNameServers() throws TextParseException
 	{
 		if(nameServers.isEmpty())
 		{
-			try
+			for(Record record : lookupRecords(hostname, Type.NS))
 			{
-				for(Record record : lookupRecords(hostname, Type.NS))
-				{
-					NSRecord ns = (NSRecord) record;
-					nameServers.add(ns.getTarget().toString());
-				}
-			}
-			catch(Exception e)
-			{
-				log.error("Unable to lookup name", e);
+				NSRecord ns = (NSRecord) record;
+				nameServers.add(ns.getTarget().toString());
 			}
 		}
 
@@ -95,22 +85,15 @@ public class Domain
 		return Arrays.asList(records);
 	}
 
-	public List<IPv4> getARecords()
+	public List<IPv4> getARecords() throws TextParseException
 	{
 		if(aRecords.isEmpty())
 		{
-			try
+			for(Record record : lookupRecords(hostname, Type.A))
 			{
-				for(Record record : lookupRecords(hostname, Type.A))
-				{
-					ARecord a = (ARecord) record;
+				ARecord a = (ARecord) record;
 
-					aRecords.add(new IPv4(a.getAddress().getHostAddress()));
-				}
-			}
-			catch(Exception e)
-			{
-				log.error("Unable to lookup name", e);
+				aRecords.add(new IPv4(a.getAddress().getHostAddress()));
 			}
 		}
 
@@ -130,22 +113,15 @@ public class Domain
 		return false;
 	}
 
-	public boolean isStoresOnlineNameServers()
+	public boolean isStoresOnlineNameServers() throws UnknownHostException, Exception
 	{
 		for(String ns : getNameServers())
 		{
-			try
-			{
-				IPv4 address = new IPv4(Address.getByName(ns).getHostAddress());
+			IPv4 address = new IPv4(Address.getByName(ns).getHostAddress());
 
-				if(inNetwork(address))
-				{
-					return true;
-				}
-			}
-			catch(Exception e)
+			if(inNetwork(address))
 			{
-				log.error("Unable to lookup name", e);
+				return true;
 			}
 		}
 

@@ -43,7 +43,7 @@ public class IPv4 extends Object
 		parseAddressBlock(addr_network.longValue(), addr_broadcast.longValue());
 	}
 
-	public IPv4(String addr_str) throws Exception
+	public IPv4(String addr_str)
 	{
 		String cidr_str = "0";
 		String dotted_quad = addr_str.trim();
